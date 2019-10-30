@@ -1,0 +1,48 @@
+version: '2'
+services:
+  app:
+    image: golang:alpine
+    volumes:
+      - .:/go/src/github.com/Rocksus/read-redis
+    working_dir: /go/src/github.com/Rocksus/read-redis
+    command: go run main.go
+    links:
+      - redis
+      - nsqd
+      - nsqlookupd
+    ports:
+      - "8080:8080"
+  # consumer:
+  #   image: golang:alpine
+  #   volumes:
+  #     - ./consumer:/go/src/github.com/Rocksus/read-redis/consumer
+  #   working_dir: /go/src/github.com/Rocksus/read-redis/consumer
+  #   command: go run consumer.go
+  #   links:
+  #     - redis
+  #     - nsqlookupd
+  nsqlookupd:
+    image: nsqio/nsq
+    ports:
+      - "4160:4160"
+      - "4161:4161"
+    command: /nsqlookupd
+  nsqd:
+    image: nsqio/nsq
+    ports:
+      - "4150:4150"
+      - "4151:4151"
+    links:
+      - nsqlookupd:nsqlookupd
+    command: /nsqd -lookupd-tcp-address=nsqlookupd:4160 -broadcast-address=nsqd
+
+  nsqadmin:
+    image: nsqio/nsq
+    ports:
+      - "4171:4171"
+    links:
+      - nsqlookupd:nsqlookupd
+      - nsqd:nsqd
+    command: /nsqadmin -lookupd-http-address=nsqlookupd:4161
+  redis:
+    image: redis:alpine
