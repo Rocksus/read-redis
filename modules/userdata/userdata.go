@@ -2,6 +2,8 @@ package userdata
 
 import (
 	"time"
+
+	"github.com/Rocksus/read-redis/modules/normalizephone"
 )
 
 // Gets the adjusted date of birth to work around leap year differences.
@@ -53,6 +55,7 @@ func (h *Handler) GetUsers() []User {
 		var user User
 		rows.Scan(&user.UserID, &user.Name, &user.MSISDN, &user.Email, &user.BirthDate)
 		user.UserAge = AgeAt(user.BirthDate, time.Now())
+		user.MSISDN = normalizephone.Normalize(user.MSISDN)
 		if user.UserAge < 150 {
 			users = append(users, user)
 		}

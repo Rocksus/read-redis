@@ -40,6 +40,7 @@ func main() {
 
 	//run a consumer goroutine
 	go consumerHandler.RunConsumer()
+	defer consumerHandler.RDC.Client.Close()
 
 	//Create mux router
 	router := mux.NewRouter()
