@@ -88,7 +88,7 @@ func (h *Handler) Serve(w http.ResponseWriter, r *http.Request) {
 	prod := messaging.NewProducer(prodConf)
 
 	// publish message
-	topic := os.Getenv("redisTopic")
+	topic := os.Getenv("nsqTopic")
 	msg := "1"
 	prod.Publish(topic, msg)
 }

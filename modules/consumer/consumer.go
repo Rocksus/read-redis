@@ -25,9 +25,9 @@ type Handler struct {
 func (h *Handler) RunConsumer() {
 	// initiate consumer
 	cfg := messaging.ConsumerConfig{
-		Channel:       os.Getenv("redisChannel"),
+		Channel:       os.Getenv("messageChannel"),
 		LookupAddress: os.Getenv("lookupAddr"),
-		Topic:         os.Getenv("redisTopic"),
+		Topic:         os.Getenv("messageTopic"),
 		MaxAttempts:   defaultConsumerMaxAttempts,
 		MaxInFlight:   defaultConsumerMaxInFlight,
 		Handler:       h.HandleMessage,

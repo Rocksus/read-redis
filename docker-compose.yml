@@ -3,24 +3,25 @@ services:
   app:
     image: golang:alpine
     volumes:
-      - .:/go/src/github.com/Rocksus/read-redis
-    working_dir: /go/src/github.com/Rocksus/read-redis
+      - .:/usr/go/src/github.com/Rocksus/read-redis
+    working_dir: /usr/go/src/github.com/Rocksus/read-redis
     command: go run main.go
     links:
       - redis
       - nsqd
       - nsqlookupd
+      - db
     ports:
       - "8080:8080"
-  # consumer:
-  #   image: golang:alpine
-  #   volumes:
-  #     - ./consumer:/go/src/github.com/Rocksus/read-redis/consumer
-  #   working_dir: /go/src/github.com/Rocksus/read-redis/consumer
-  #   command: go run consumer.go
-  #   links:
-  #     - redis
-  #     - nsqlookupd
+  consumer:
+    image: golang:alpine
+    volumes:
+      - ./consumer:/usr/go/src/github.com/Rocksus/read-redis/consumer
+    working_dir: /usr/go/src/github.com/Rocksus/read-redis/consumer
+    command: go run consumer.go
+    links:
+      - redis
+      - nsqlookupd
   nsqlookupd:
     image: nsqio/nsq
     ports:
@@ -46,3 +47,12 @@ services:
     command: /nsqadmin -lookupd-http-address=nsqlookupd:4161
   redis:
     image: redis:alpine
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=${dbUser}
+      - POSTGRES_PASSWORD=${dbPass}
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
