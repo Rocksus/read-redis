@@ -2,11 +2,12 @@
 Implementation of nsq handling redis data update
 
 ## Setting Up
-To run, clone this project and use
+To run, clone this project and change the `volumes` and `working_dir` of every services in `docker-compose.yml`
+After that, run
 ```bash
 docker-compose up
 ```
-
+You can add `-d` to run docker in the background.
 ## Environment Variables
 Currently we need the following in an `.env` file:
 ```
