@@ -1,7 +1,7 @@
 CREATE TABLE ws_user (
     user_id bigserial PRIMARY KEY,
     full_name VARCHAR(255),
-    msisdn VARCHAR(15),
+    msisdn VARCHAR(25),
     user_email VARCHAR(255),
     birth_date timestamp
 );
