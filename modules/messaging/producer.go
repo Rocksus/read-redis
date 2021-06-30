@@ -33,7 +33,6 @@ func (p *Producer) Publish(topic string, msg interface{}) error {
 	if err != nil {
 		return err
 	}
-	topic = topic
 
 	return p.prod.Publish(topic, payload)
 }

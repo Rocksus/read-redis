@@ -21,7 +21,7 @@ dbName=postgres
 
 messageChannel=message_channel
 messageTopic=message_topic
-nsqdAddr=nsqd:4151
+nsqdAddr=nsqd:4150
 lookupAddr=nsqlookupd:4161
 ```
 
