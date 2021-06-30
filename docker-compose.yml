@@ -2,6 +2,7 @@ version: '2'
 services:
   app:
     image: golang:alpine
+    restart: always
     volumes:
       - .:/usr/go/src/github.com/Rocksus/read-redis
     working_dir: /usr/go/src/github.com/Rocksus/read-redis
@@ -48,11 +49,11 @@ services:
   redis:
     image: redis:alpine
   db:
-    image: postgres
+    build: ./db
     restart: always
     environment:
-      - POSTGRES_USER=${dbUser}
-      - POSTGRES_PASSWORD=${dbPass}
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
-      - ./create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - ./db/postgres-data:/var/lib/postgresql/data
